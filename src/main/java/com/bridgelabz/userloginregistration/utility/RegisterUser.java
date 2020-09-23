@@ -6,7 +6,11 @@ public class RegisterUser {
 
     private static final Scanner scan = new Scanner(System.in);
 
-    public static String takingInput(){
+    public static String takingStringInput(){
         return scan.nextLine();
+    }
+
+    public static int takingIntInput() {
+        return scan.nextByte();
     }
 }

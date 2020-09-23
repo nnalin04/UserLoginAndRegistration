@@ -4,9 +4,7 @@ import com.bridgelabz.userloginregistration.exception.UserLoginException;
 import com.bridgelabz.userloginregistration.pojo.User;
 import com.bridgelabz.userloginregistration.repo.UserRepo;
 import com.bridgelabz.userloginregistration.utility.RegisterUser;
-
 import java.sql.SQLException;
-import java.util.Scanner;
 
 public class UserService {
 
@@ -38,7 +36,7 @@ public class UserService {
                                         UserLoginException.ExceptionType.EMAIL_ID_NOT_PRESENT);
         while(!user.password.equals(password) || count < 2){
             System.out.println("Enter the correct password");
-            password = RegisterUser.takingInput();
+            password = RegisterUser.takingStringInput();
             count++;
         }
         if (count == 3)
@@ -47,39 +45,39 @@ public class UserService {
         return user;
     }
 
-    public void updateUser(User user, Scanner scan) throws SQLException {
+    public void updateUser(User user) throws SQLException {
         System.out.println("What do you want to up date");
         System.out.println("1 - email");
         System.out.println("2 - password");
         System.out.println("3 - phoneNo");
-        int choice = scan.nextByte();
+        int choice = RegisterUser.takingIntInput();
         switch(choice) {
             case 1:
                 System.out.println("Enter the new email");
-                String newEmail = RegisterUser.takingInput();
+                String newEmail = RegisterUser.takingStringInput();
 
                 newEmail = checkFieldValidation(UserRegistration.ValidatorPat.EMAIL,
                         newEmail, "email Id");
-                user = userRepo.updateUser(user, newEmail, "email");
+                userRepo.updateUser(user, newEmail, "email");
                 break;
             case 2:
                 System.out.println("Enter the new password");
-                String newPassword = RegisterUser.takingInput();
+                String newPassword = RegisterUser.takingStringInput();
 
                 newPassword = checkFieldValidation(UserRegistration.ValidatorPat.EMAIL,
                         newPassword, "email Id");
-                user = userRepo.updateUser(user, newPassword, "password");
+                userRepo.updateUser(user, newPassword, "password");
                 break;
             case 3:
                 System.out.println("Enter the new email");
-                String newPhoneNo = RegisterUser.takingInput();
+                String newPhoneNo = RegisterUser.takingStringInput();
 
                 newPhoneNo = checkFieldValidation(UserRegistration.ValidatorPat.EMAIL,
                         newPhoneNo, "email Id");
-                user = userRepo.updateUser(user, newPhoneNo, "phoneNo");
+                userRepo.updateUser(user, newPhoneNo, "phoneNo");
                 break;
             default:
-                // code block
+                System.out.println("Invalid input");
         }
     }
 
@@ -92,12 +90,12 @@ public class UserService {
 
         while (userRepo.findByEmailId(input) != null){
             System.out.println(type+" already present please enter different "+type);
-            input = RegisterUser.takingInput();
+            input = RegisterUser.takingStringInput();
         }
 
         while(!UserRegistration.validateInput(input, pattern)){
             System.out.println("Invalid "+type+" please re-enter");
-            input = RegisterUser.takingInput();
+            input = RegisterUser.takingStringInput();
         }
         return input;
     }
