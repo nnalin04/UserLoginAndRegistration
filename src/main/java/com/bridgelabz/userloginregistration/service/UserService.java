@@ -8,9 +8,9 @@ import java.sql.SQLException;
 
 public class UserService {
 
-    UserRepo userRepo = new UserRepo();
+    UserRepo userRepo = new UserRepo();;
 
-    public UserService() throws SQLException {
+    public UserService() {
     }
 
     public void registerUser(User user) throws SQLException {

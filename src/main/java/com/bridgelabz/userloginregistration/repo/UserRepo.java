@@ -11,27 +11,39 @@ public class UserRepo {
     private static String password = "Iamcool@1996";
 
     Connection conn;
-    Statement myStmt;
+    PreparedStatement myStmt = null;
 
-    public UserRepo() throws SQLException {
-        this.conn = DriverManager.getConnection(url, userName, password);
-        this.myStmt = conn.createStatement();
+    public UserRepo() {
+        createConnection();
+    }
+
+    private void createConnection(){
+        try {
+            this.conn = DriverManager.getConnection(url, userName, password);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
     }
 
     public User saveUserInDatabase(User user) throws SQLException {
-        String sql = new StringBuilder().append("insert into userdetail ")
-                                        .append(" (firstName, lastName, email, password, phoneNo)")
-                                        .append(" values ('").append(user.firstName).append("', '")
-                                        .append(user.lastName).append("', '").append(user.email)
-                                        .append("', '").append(user.password).append("', '")
-                                        .append(user.phoneNo).append("')").toString();
-        myStmt.executeUpdate(sql);
+        String sql = "insert into userdetail "+" (firstName, lastName, email, password, phoneNo)"
+                                              +" values (?, ?, ?, ?, ?)";
+        myStmt = conn.prepareStatement(sql);
+        myStmt.setString(1, user.firstName);
+        myStmt.setString(2, user.lastName);
+        myStmt.setString(3, user.email);
+        myStmt.setString(4, user.password);
+        myStmt.setString(5, user.phoneNo);
+        myStmt.executeQuery(sql);
         return user;
     }
     
     public User findByEmailId(String email) throws SQLException {
-        String sql1 = "select * from userdetail where email='"+email+"'";
-        ResultSet rs = myStmt.executeQuery(sql1);
+        String sql = "select * from userdetail where email=?";
+        myStmt = conn.prepareStatement(sql);
+        myStmt.setString(1, email);
+        ResultSet rs = myStmt.executeQuery(sql);
         User user = new User();
         user.firstName = rs.getString("firstName");
         user.lastName = rs.getString("lastName");
@@ -42,16 +54,20 @@ public class UserRepo {
     }
 
     public User updateUser(User user, String input, String type) throws SQLException {
-        String sql = "update userdetail"
-                   + "set "+ type +"='"+input+"'"
-                   + "where email ='"+user.email+"'";
-        myStmt.executeUpdate(sql);
+        String sql = "update userdetail " + "set ?=?" + "where email =?";
+        myStmt = conn.prepareStatement(sql);
+        myStmt.setString(1, type);
+        myStmt.setString(1, input);
+        myStmt.setString(3, user.email);
+        myStmt.executeQuery(sql);
         user = findByEmailId(user.email);
         return user;
     }
 
     public void deleteByEmailId(String email) throws SQLException {
-        String sql = "delete from userdetail where email='"+email+"'";
-        myStmt.executeUpdate(sql);
+        String sql = "delete from userdetail where email=?";
+        myStmt = conn.prepareStatement(sql);
+        myStmt.setString(1, email);
+        myStmt.executeQuery(sql);
     }
 }

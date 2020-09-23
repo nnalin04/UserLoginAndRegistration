@@ -5,7 +5,6 @@ import com.bridgelabz.userloginregistration.exception.UserLoginException;
 import com.bridgelabz.userloginregistration.service.UserService;
 import com.bridgelabz.userloginregistration.utility.RegisterUser;
 import java.sql.SQLException;
-import java.util.Scanner;
 
 public class LoginAndRegistration {
 

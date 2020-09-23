@@ -7,6 +7,7 @@ public class RegisterUser {
     private static final Scanner scan = new Scanner(System.in);
 
     public static String takingStringInput(){
+        scan.nextLine();
         return scan.nextLine();
     }
 
