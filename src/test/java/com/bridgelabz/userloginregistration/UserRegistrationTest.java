@@ -1,19 +1,37 @@
 package com.bridgelabz.userloginregistration;
 
+import com.bridgelabz.userloginregistration.exception.UserLoginException;
+import com.bridgelabz.userloginregistration.pojo.User;
+import com.bridgelabz.userloginregistration.repo.UserRepo;
 import com.bridgelabz.userloginregistration.service.UserRegistration;
+import com.bridgelabz.userloginregistration.service.UserService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import java.sql.SQLException;
+
+import static org.mockito.Mockito.when;
 
 public class UserRegistrationTest {
 
-    @Mock
     UserRegistration register;
+    
+    @Mock
+    UserRepo userRepo;
+
+    @InjectMocks
+    UserService service = new UserService();
+
 
     @Before
     public void setUp() throws Exception {
         register = new UserRegistration();
+        MockitoAnnotations.initMocks(this);
+
     }
 
     @Test
@@ -74,5 +92,15 @@ public class UserRegistrationTest {
     public void givenPassword_WhenShort_ShouldReturnFalse(){
         boolean result = register.validateInput("secAs", UserRegistration.ValidatorPat.PASSWORD);
         Assert.assertFalse(result);
+    }
+
+    @Test
+    public void givenEmail_WhenProper_ShouldReturnUser() throws UserLoginException, SQLException {
+        User user = new User();
+        String email = "nnalin04@gmail.com";
+        String password = "Iamcool@1996";
+        when(service.loginUser(email,password)).thenReturn(user);
+        User userDetail = service.loginUser(email, password);
+        Assert.assertEquals(user, userDetail);
     }
 }

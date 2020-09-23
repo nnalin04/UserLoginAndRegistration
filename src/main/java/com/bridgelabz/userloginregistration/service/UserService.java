@@ -26,6 +26,7 @@ public class UserService {
         user.phoneNo = checkFieldValidation(UserRegistration.ValidatorPat.MOBILE,
                 user.phoneNo, "phone no.");
         userRepo.saveUserInDatabase(user);
+        System.out.println("User registered");
     }
 
     public User loginUser(String email, String password) throws UserLoginException, SQLException {
